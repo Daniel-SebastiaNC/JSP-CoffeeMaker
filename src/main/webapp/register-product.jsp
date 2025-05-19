@@ -19,9 +19,21 @@
           CADASTRO DE PRODUTO
         </div>
 
+        <c:if test="${not empty message}">
+          <div class="alert alert-success ms-2 me-2 mt-2" role="alert">
+            ${message}
+          </div>
+        </c:if>
+
+        <c:if test="${not empty error}">
+          <div class="alert alert-danger ms-2 me-2 mt-2" role="alert">
+              ${error}
+          </div>
+        </c:if>
+
         <div class="card-body">
 
-          <form action="produto" method="post">
+          <form action="product" method="post">
 
             <div class="form-group">
               <label for="id-nome">Nome</label>
@@ -30,7 +42,7 @@
 
             <div class="form-group">
               <label for="id-valor">Valor</label>
-              <input type="number" name="value" id="id-valor" class="form-control">
+              <input type="text" name="value" id="id-valor" class="form-control">
             </div>
 
             <div class="form-group">
