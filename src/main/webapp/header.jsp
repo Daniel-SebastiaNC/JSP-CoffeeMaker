@@ -17,7 +17,7 @@
             <a class="nav-link" aria-current="page" href="register-product.jsp">Cadastro</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/coffeemaker">Produtos</a>
+            <a class="nav-link" href="product?action=list">Produtos</a>
           </li>
 
         </ul>

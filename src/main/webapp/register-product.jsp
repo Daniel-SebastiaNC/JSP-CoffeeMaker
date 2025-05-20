@@ -33,7 +33,7 @@
 
         <div class="card-body">
 
-          <form action="product" method="post">
+          <form action="product?action=register" method="post">
 
             <div class="form-group">
               <label for="id-nome">Nome</label>
