@@ -28,6 +28,7 @@ public class ProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
+
         switch (action) {
             case "register":
                 this.registerProduct(req, resp);
@@ -35,8 +36,10 @@ public class ProductServlet extends HttpServlet {
             case "update":
                 this.updateProduct(req, resp);
                 break;
+            case "delete":
+                this.deleteProduct(req, resp);
+                break;
         }
-        registerProduct(req, resp);
     }
 
     private void registerProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -54,7 +57,7 @@ public class ProductServlet extends HttpServlet {
             e.printStackTrace();
             req.setAttribute("error", e.getMessage());
         }
-
+        System.out.println("register");
         req.getRequestDispatcher("register-product.jsp").forward(req, resp);
     }
 
@@ -74,7 +77,21 @@ public class ProductServlet extends HttpServlet {
             e.printStackTrace();
             req.setAttribute("error", e.getMessage());
         }
+        System.out.println("update");
+        this.list(req, resp);
+    }
 
+    private void deleteProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long id = Long.parseLong(req.getParameter("idDelete"));
+
+        try {
+            dao.delete(id);
+            req.setAttribute("message", "product deletado com sucesso");
+        } catch (DBException e) {
+            req.setAttribute("error", "Erro ao deletar o produto");
+            e.printStackTrace();
+        }
+        System.out.println("delete!");
         this.list(req, resp);
     }
 
@@ -88,10 +105,7 @@ public class ProductServlet extends HttpServlet {
                 this.list(req, resp);
                 break;
             case "open-edition-form":
-                Long id = Long.parseLong(req.getParameter("id"));
-                Product byId = dao.findById(id);
-                req.setAttribute("product", byId);
-                req.getRequestDispatcher("edit-product.jsp").forward(req, resp);
+                openFormEdit(req, resp);
                 break;
             default:
                 break;
@@ -99,8 +113,16 @@ public class ProductServlet extends HttpServlet {
     }
 
     private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("list");
         List<Product> all = dao.findAll();
         req.setAttribute("products", all);
         req.getRequestDispatcher("list-product.jsp").forward(req, resp);
+    }
+
+    private void openFormEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long id = Long.parseLong(req.getParameter("id"));
+        Product byId = dao.findById(id);
+        req.setAttribute("product", byId);
+        req.getRequestDispatcher("edit-product.jsp").forward(req, resp);
     }
 }
