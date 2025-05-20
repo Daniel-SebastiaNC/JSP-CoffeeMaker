@@ -57,6 +57,16 @@
                                         <c:param name="id" value="${product.id}"/>
                                     </c:url>
                                     <a href="${link}" class="btn btn-primary">Editar</a>
+
+                                    <button
+                                            type="button"
+                                            class="btn btn-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            onclick="idDelete.value = ${product.id}"
+                                    >
+                                        Excluir
+                                    </button>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -71,6 +81,61 @@
         </div>
 
     </main>
+    <!-- Modal -->
+    <div
+            class="modal fade"
+            id="deleteModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1
+                            class="modal-title fs-5"
+                            id="exampleModalLabel">
+                        Confirmar Exclusão
+                    </h1>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>Você confirma a exclusão deste produto?</h4>
+                    <p><strong>Atenção!</strong> Esta ação é irreversível.</p>
+                </div>
+                <div class="modal-footer">
+
+                    <form action="product" method="post">
+                        <input
+                                type="hidden"
+                                name="action"
+                                value="delete">
+                        <input
+                                type="hidden"
+                                name="idDelete"
+                                id="idDelete">
+                        <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Não
+                        </button>
+                        <button
+                                type="submit"
+                                class="btn btn-danger">
+                            Sim
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <%--    fim modal--%>
     <%@include file="footer.jsp" %>
 
     <script src="resources/js/bootstrap.bundle.js"></script>
