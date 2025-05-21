@@ -57,6 +57,26 @@
               <input type="date" name="dateCreated" id="id-fabricacao" class="form-control" value="${product.dateCreated}">
             </div>
 
+            <div class="form-group">
+              <label for="id-category">Categoria</label>
+              <select name="category" id="id-category" class="form-control">
+                <option value="0" >Selecionar</option>
+
+                <c:forEach items="${categories}" var="category">
+
+                  <c:if test="${category.id == product.category.id}">
+                    <option value="${category.id}" selected>${category.name}</option>
+                  </c:if>
+
+                  <c:if test="${category.id != product.category.id}">
+                    <option value="${category.id}">${category.name}</option>
+                  </c:if>
+
+                </c:forEach>
+              </select>
+
+            </div>
+
             <input type="submit" value="Salvar" class="btn btn-primary mt-3">
 
           </form>

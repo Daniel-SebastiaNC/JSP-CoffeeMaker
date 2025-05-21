@@ -30,6 +30,7 @@
                             <th class="text-end">Quantidade</th>
                             <th class="text-end">Valor</th>
                             <th class="text-center">Data de fabricação</th>
+                            <th class="text-center">Categoria</th>
                             <th class="text-center"></th>
                         </tr>
                         </thead>
@@ -51,6 +52,7 @@
                                         value="${dateCreatedFmt}"
                                         pattern="dd/MM/yyyy"/>
                                 </td>
+                                <td class="text-center">${product.category.name}</td>
                                 <td class="text-center">
                                     <c:url value="product" var="link">
                                         <c:param name="action" value="open-edition-form"/>
@@ -73,7 +75,7 @@
                         </tbody>
 
                     </table>
-                    <a href="register-product.jsp" class="btn btn-primary">Adicionar produto</a>
+                    <a href="product?action=open-form-register" class="btn btn-primary">Adicionar produto</a>
                 </div>
 
             </div>

@@ -36,23 +36,34 @@
           <form action="product?action=register" method="post">
 
             <div class="form-group">
-              <label for="id-nome">Nome</label>
-              <input type="text" name="name" id="id-nome" class="form-control">
+              <label for="id-name">Nome</label>
+              <input type="text" name="name" id="id-name" class="form-control">
             </div>
 
             <div class="form-group">
-              <label for="id-valor">Valor</label>
-              <input type="text" name="value" id="id-valor" class="form-control">
+              <label for="id-value">Valor</label>
+              <input type="text" name="value" id="id-value" class="form-control">
             </div>
 
             <div class="form-group">
-              <label for="id-quantidade">Quantidade</label>
-              <input type="number" name="quantity" id="id-quantidade" class="form-control">
+              <label for="id-quantity">Quantidade</label>
+              <input type="number" name="quantity" id="id-quantity" class="form-control">
             </div>
 
             <div class="form-group">
-              <label for="id-fabricacao">Data de Fabricação</label>
-              <input type="date" name="dateCreated" id="id-fabricacao" class="form-control">
+              <label for="id-dateCreated">Data de Fabricação</label>
+              <input type="date" name="dateCreated" id="id-dateCreated" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="id-category">Categoria</label>
+              <select name="category" id="id-category" class="form-control">
+                <option value="0" >Selecionar</option>
+                <c:forEach items="${categories}" var="category">
+                  <option value="${category.id}">${category.name}</option>
+                </c:forEach>
+              </select>
+
             </div>
 
             <input type="submit" value="Salvar" class="btn btn-primary mt-3">
