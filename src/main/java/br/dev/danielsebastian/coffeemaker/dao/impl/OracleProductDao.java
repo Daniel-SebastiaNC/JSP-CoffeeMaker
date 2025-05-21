@@ -3,6 +3,7 @@ package br.dev.danielsebastian.coffeemaker.dao.impl;
 import br.dev.danielsebastian.coffeemaker.dao.ConnectionManager;
 import br.dev.danielsebastian.coffeemaker.dao.ProductDao;
 import br.dev.danielsebastian.coffeemaker.exception.DBException;
+import br.dev.danielsebastian.coffeemaker.model.Category;
 import br.dev.danielsebastian.coffeemaker.model.Product;
 
 import java.sql.*;
@@ -21,13 +22,14 @@ public class OracleProductDao implements ProductDao {
         try {
             connection = ConnectionManager.getInstance().getConnection();
 
-            String sql = "INSERT INTO TB_PRODUCT (cd_id, nm_name, vl_value, nm_quantity, date_create) VALUES (sq_tb_product.nextval, ?, ?, ?, ?)";
+            String sql = "INSERT INTO TB_PRODUCT (cd_id, nm_name, vl_value, nm_quantity, date_create, id_category) VALUES (sq_tb_product.nextval, ?, ?, ?, ?, ?)";
 
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, product.getName());
             stmt.setDouble(2, product.getValue());
             stmt.setInt(3, product.getQuantity());
             stmt.setDate(4, Date.valueOf(product.getDateCreated()));
+            stmt.setLong(5, product.getCategory().getId());
 
             stmt.executeUpdate();
 
@@ -53,14 +55,15 @@ public class OracleProductDao implements ProductDao {
 
         try {
             connection = ConnectionManager.getInstance().getConnection();
-            String sql = "UPDATE TB_PRODUCT SET nm_name = ?, vl_value = ?, nm_quantity = ?, date_create = ? WHERE cd_id = ?";
+            String sql = "UPDATE TB_PRODUCT SET nm_name = ?, vl_value = ?, nm_quantity = ?, date_create = ?, id_category = ? WHERE cd_id = ?";
 
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, product.getName());
             stmt.setDouble(2, product.getValue());
             stmt.setInt(3, product.getQuantity());
             stmt.setDate(4, Date.valueOf(product.getDateCreated()));
-            stmt.setLong(5, product.getId());
+            stmt.setLong(5, product.getCategory().getId());
+            stmt.setLong(6, product.getId());
 
             stmt.executeUpdate();
 
@@ -116,7 +119,10 @@ public class OracleProductDao implements ProductDao {
         try {
             connection = ConnectionManager.getInstance().getConnection();
 
-            String sql = "SELECT * FROM TB_PRODUCT WHERE cd_id = ?";
+            String sql = "SELECT * FROM TB_PRODUCT " +
+                    "INNER JOIN TB_CATEGORY " +
+                    " ON TB_CATEGORY.cd_id = TB_PRODUCT.id_category " +
+                    "WHERE TB_PRODUCT.cd_id = ?";
 
             stmt = connection.prepareStatement(sql);
             stmt.setLong(1, id);
@@ -129,6 +135,13 @@ public class OracleProductDao implements ProductDao {
                         rs.getDouble("vl_value"),
                         rs.getInt("nm_quantity"),
                         rs.getDate("date_create").toLocalDate()
+                );
+
+                product.setCategory(
+                        new Category(
+                                rs.getLong("id_category"),
+                                rs.getString("nm_category")
+                        )
                 );
             }
             
@@ -149,7 +162,6 @@ public class OracleProductDao implements ProductDao {
 
     @Override
     public List<Product> findAll() {
-
         List<Product> products = new ArrayList<>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -157,21 +169,28 @@ public class OracleProductDao implements ProductDao {
         try {
             connection = ConnectionManager.getInstance().getConnection();
 
-            String sql = "SELECT * FROM TB_PRODUCT";
+            String sql = "SELECT * FROM TB_PRODUCT " +
+            "INNER JOIN TB_CATEGORY ON TB_CATEGORY.cd_id = TB_PRODUCT.id_category";
 
             stmt = connection.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                products.add(
-                        new Product(
-                                rs.getLong("cd_id"),
-                                rs.getString("nm_name"),
-                                rs.getDouble("vl_value"),
-                                rs.getInt("nm_quantity"),
-                                rs.getDate("date_create").toLocalDate()
+                Product product = new Product(
+                        rs.getLong("cd_id"),
+                        rs.getString("nm_name"),
+                        rs.getDouble("vl_value"),
+                        rs.getInt("nm_quantity"),
+                        rs.getDate("date_create").toLocalDate()
+                );
+
+                product.setCategory(
+                        new Category(
+                                rs.getLong("id_category"),
+                                rs.getString("nm_category")
                         )
                 );
+                products.add(product);
             }
         } catch (SQLException e) {
             e.printStackTrace();

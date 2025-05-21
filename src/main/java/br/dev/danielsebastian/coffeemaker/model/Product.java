@@ -9,6 +9,7 @@ public class Product {
     private double value;
     private int quantity;
     private LocalDate dateCreated;
+    private Category category;
 
     public Product() {
     }
@@ -37,19 +38,19 @@ public class Product {
         this.name = name;
     }
 
-    public Double getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -61,6 +62,14 @@ public class Product {
         this.dateCreated = dateCreated;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -69,6 +78,7 @@ public class Product {
                 ", value=" + value +
                 ", quantity=" + quantity +
                 ", dateCreated=" + dateCreated +
+                ", category=" + category +
                 '}';
     }
 }
